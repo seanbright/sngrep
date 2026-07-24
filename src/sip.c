@@ -797,13 +797,15 @@ sip_parse_extra_headers(sip_msg_t *msg, const u_char *payload)
 
         // Ensure the copy length does not exceed MAX_WARNING_SIZE
         int warning_match_len = pmatch[1].rm_eo - pmatch[1].rm_so;
-        if (warning_match_len > MAX_WARNING_SIZE) {
-            warning_match_len = MAX_WARNING_SIZE;
+        if (warning_match_len > 0) {
+            if (warning_match_len > MAX_WARNING_SIZE) {
+                warning_match_len = MAX_WARNING_SIZE;
+            }
+            sng_strncpy(warning, (const char *)payload +  pmatch[1].rm_so, warning_match_len);
+            msg->call->warning = atoi(warning);
         }
-        sng_strncpy(warning, (const char *)payload +  pmatch[1].rm_so, warning_match_len);
 
-        msg->call->warning = atoi(warning);
-     }
+    }
 }
 
 void
