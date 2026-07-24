@@ -691,12 +691,18 @@ rtp_check_packet(packet_t *packet)
 
                         // Read all report blocks
                         while (bsize < ntohs(hdr_xr.len) * 4 + 4) {
+                            // Ensure there is enough payload to read the block header
+                            if (bsize + sizeof(blk_xr) > size)
+                                break;
                             // Read block header
                             memcpy(&blk_xr, payload + bsize, sizeof(blk_xr));
                             // Check block type
                             switch (blk_xr.type) {
                                 case RTCP_XR_VOIP_METRCS:
-                                    memcpy(&blk_xr_voip, payload + sizeof(hdr_xr), sizeof(blk_xr_voip));
+                                    // Ensure there is enough payload to read the block data
+                                    if (bsize + sizeof(blk_xr_voip) > size)
+                                        break;
+                                    memcpy(&blk_xr_voip, payload + bsize, sizeof(blk_xr_voip));
                                     stream->rtcpinfo.fdiscard = blk_xr_voip.drate;
                                     stream->rtcpinfo.flost = blk_xr_voip.lrate;
                                     stream->rtcpinfo.mosl = blk_xr_voip.moslq;
