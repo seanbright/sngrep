@@ -35,6 +35,14 @@ sip_calls_iterator()
     return it;
 }
 
+vector_iter_t
+sip_active_calls_iterator()
+{
+    vector_iter_t it;
+    memset(&it, 0, sizeof(it));
+    return it;
+}
+
 struct sip_call *
 msg_get_call(const sip_msg_t *msg)
 {
@@ -56,8 +64,6 @@ media_get_format(sdp_media_t *media, uint32_t code)
     (void) code;
     return NULL;
 }
-
-#include "../src/rtp.c"
 
 static packet_t *
 rtp_packet_ex(uint16_t seq, uint32_t ts, uint32_t usec, uint8_t payload_type,

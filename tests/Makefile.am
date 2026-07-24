@@ -15,6 +15,6 @@ test_008_SOURCES=test_008.c
 test_009_SOURCES=test_009.c
 test_010_SOURCES=test_010.c ../src/hash.c
 test_011_SOURCES=test_011.c
-test_012_SOURCES=test_012.c ../src/packet.c ../src/vector.c ../src/util.c ../src/address.c
+test_012_SOURCES=test_012.c ../src/packet.c ../src/vector.c ../src/util.c ../src/address.c ../src/rtp.c
 
 TESTS = $(check_PROGRAMS)
