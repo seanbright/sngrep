@@ -1,3 +1,17 @@
+2026-07-24 Ivan Alonso <kaian@irontec.com>
+	* sngrep 1.8.4 released
+
+	* call flow: add RTP stream statistics to call flow UI
+	* call list: add SIP Contact column to F10 call list selection
+	* save: new parameter to disable edition of the save path
+	* options: set default savepath to user homedir
+	* rtp: fix heap out of bounds read in RTCP XR block parser
+	* sip: fix stack buffer overflow on non-numeric Warning header
+	* util: check valid length parameter in sng_strncpy
+	* call flow: fix alias display on columns for IPv6 addresses
+	* build: use libpcre3 over libpcre2 on old distributions
+	* build: build rpm spec across EL7-10, Fedora and openSUSE
+
 2025-10-16 Ivan Alonso <kaian@irontec.com>
 	* sngrep 1.8.3 released
 
