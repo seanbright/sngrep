@@ -54,7 +54,7 @@ filter_set(int type, const char *expr)
 
     // Remove previous value
     if (filters[type].expr) {
-        sng_free(filters[type].expr);
+        free(filters[type].expr);
         pcre_free(filters[type].regex);
     }
 
@@ -77,7 +77,7 @@ filter_set(int type, const char *expr)
 
     // Remove previous value
     if (filters[type].expr) {
-        sng_free(filters[type].expr);
+        free(filters[type].expr);
         pcre2_code_free(filters[type].regex);
     }
 
@@ -95,7 +95,7 @@ filter_set(int type, const char *expr)
 
     // Remove previous value
     if (filters[type].expr) {
-        sng_free(filters[type].expr);
+        free(filters[type].expr);
         regfree(&filters[type].regex);
     }
 

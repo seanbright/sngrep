@@ -51,7 +51,7 @@ call_group_destroy(sip_call_group_t *group)
     }
     vector_destroy(group->calls);
     vector_destroy(group->msgs);
-    sng_free(group);
+    free(group);
 }
 
 bool

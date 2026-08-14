@@ -56,7 +56,7 @@ media_destroyer(void *item)
     if (!item)
         return;
     vector_destroy(media->formats);
-    sng_free(media);
+    free(media);
 }
 
 void

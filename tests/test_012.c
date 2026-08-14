@@ -138,7 +138,7 @@ main()
     assert(stream->rtpstats.mean_jitter == 0.0);
     assert(stream->rtpstats.delta_samples == 2);
     assert(stream->rtpstats.jitter_samples == 2);
-    sng_free(stream);
+    free(stream);
 
     stream = stream_create(NULL, dst, PACKET_RTP);
     stream_set_format(stream, 0);
@@ -150,7 +150,7 @@ main()
     add_rtp(stream, 11, 160, 20000);
     assert(stream_get_lost_count(stream) == 0);
     assert(stream->rtpstats.outoforder == 2);
-    sng_free(stream);
+    free(stream);
 
     stream = stream_create(NULL, dst, PACKET_RTP);
     stream_set_format(stream, 0);
@@ -160,7 +160,7 @@ main()
     assert(stream_get_lost_count(stream) == 0);
     assert(stream->rtpstats.duplicates == 1);
     assert(stream->rtpstats.outoforder == 1);
-    sng_free(stream);
+    free(stream);
 
     stream = stream_create(NULL, dst, PACKET_RTP);
     stream_set_format(stream, 0);
@@ -171,7 +171,7 @@ main()
     assert(stream_get_expected_count(stream) == 3);
     assert(stream_get_lost_count(stream) == 0);
     assert(stream->rtpstats.outoforder == 1);
-    sng_free(stream);
+    free(stream);
 
     stream = stream_create(NULL, dst, PACKET_RTP);
     stream_set_format(stream, 0);
@@ -186,7 +186,7 @@ main()
     assert(stream->rtpstats.min_jitter < 0.63);
     assert(stream->rtpstats.mean_jitter > 0.62);
     assert(stream->rtpstats.mean_jitter < 0.63);
-    sng_free(stream);
+    free(stream);
 
     stream = stream_create(NULL, dst, PACKET_RTP);
     stream_set_format(stream, 0);
@@ -197,7 +197,7 @@ main()
     assert(stream->rtpstats.delta_samples == 1);
     assert(stream->rtpstats.max_delta == 20.0);
     assert(stream->rtpstats.mean_delta == 20.0);
-    sng_free(stream);
+    free(stream);
 
     stream = stream_create(NULL, dst, PACKET_RTP);
     stream_set_format(stream, 13);
@@ -206,7 +206,7 @@ main()
     assert(stream->rtpstats.comfort_noise == 2);
     assert(stream->rtpstats.delta_samples == 0);
     assert(stream->rtpstats.jitter_samples == 0);
-    sng_free(stream);
+    free(stream);
 
     stream = stream_create(NULL, dst, PACKET_RTP);
     stream_set_format(stream, 0);
@@ -215,7 +215,7 @@ main()
     assert(stream->rtpstats.wrong_timestamp == 1);
     assert(stream->rtpstats.delta_samples == 0);
     assert(stream->rtpstats.jitter_samples == 0);
-    sng_free(stream);
+    free(stream);
 
     return 0;
 }

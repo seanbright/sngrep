@@ -224,7 +224,7 @@ tls_connection_create(struct in_addr caddr, uint16_t cport, struct in_addr saddr
     if (ret != GNUTLS_E_SUCCESS)
         return NULL;
 
-    sng_free(keycontent.data);
+    free(keycontent.data);
 
     // Check this is a valid RSA key
     if (gnutls_x509_privkey_get_pk_algorithm(spkey) != GNUTLS_PK_RSA)
@@ -259,13 +259,13 @@ tls_connection_destroy(struct SSLConnection *conn)
 
     // Deallocate connection memory
     gnutls_deinit(conn->ssl);
-    sng_free(conn->key_material.client_write_MAC_key);
-    sng_free(conn->key_material.server_write_MAC_key);
-    sng_free(conn->key_material.client_write_IV);
-    sng_free(conn->key_material.server_write_IV);
-    sng_free(conn->key_material.client_write_key);
-    sng_free(conn->key_material.server_write_key);
-    sng_free(conn);
+    free(conn->key_material.client_write_MAC_key);
+    free(conn->key_material.server_write_MAC_key);
+    free(conn->key_material.client_write_IV);
+    free(conn->key_material.server_write_IV);
+    free(conn->key_material.client_write_key);
+    free(conn->key_material.server_write_key);
+    free(conn);
 }
 
 /**
@@ -311,7 +311,7 @@ tls_check_keyfile(const char *keyfile)
 
     // Import RSA keyfile
     ret = gnutls_x509_privkey_import(key, &keycontent, GNUTLS_X509_FMT_PEM);
-    sng_free(keycontent.data);
+    free(keycontent.data);
     if (ret < GNUTLS_E_SUCCESS) {
         fprintf (stderr, "Error loading keyfile: %s\n", gnutls_strerror(ret));
         return 0;
@@ -421,7 +421,7 @@ tls_process_segment(packet_t *packet, struct tcphdr *tcp)
         }
     }
 
-    sng_free(out);
+    free(out);
     return 0;
 }
 
@@ -694,8 +694,8 @@ tls_process_record_handshake(struct SSLConnection *conn, const opaque *fragment,
                 /* key_material+=conn->cipher_data.ivblock; */
 
                 // Free temporally allocated memory
-                sng_free(seed);
-                //sng_free(key_material);
+                free(seed);
+                //free(key_material);
 
                 int mode = 0;
                 if (conn->cipher_data.mode == MODE_CBC) {
@@ -734,7 +734,7 @@ tls_process_record_handshake(struct SSLConnection *conn, const opaque *fragment,
                     uint8_t *decoded = sng_malloc(len);
                     uint32_t decodedlen = len;
                     tls_process_record_data(conn, fragment, len, &decoded, &decodedlen);
-                    sng_free(decoded);
+                    free(decoded);
                 }
                 break;
         }
@@ -812,7 +812,7 @@ tls_process_record_data(struct SSLConnection *conn, const opaque *fragment,
     }
 
     // Clenaup decoded memory
-    sng_free(decoded);
+    free(decoded);
     return *outl;
 }
 

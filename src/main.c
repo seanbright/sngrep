@@ -390,7 +390,7 @@ main(int argc, char* argv[])
             vector_append(indevices, token);
             token = strtok(NULL, ",");
         }
-        sng_free(token);
+        free(token);
     }
 
     // If we have an input file, load it

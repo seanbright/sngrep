@@ -669,7 +669,7 @@ dialog_confirm(const char *title, const char *text, const char *options)
         sng_strncpy(opts[i], option, sizeof(opts[i]));
         i++;
     }
-    sng_free(tofree);
+    free(tofree);
 
     // Create a new panel and show centered
     dialog_win = newwin(height, width, (LINES - height) / 2, (COLS - width) / 2);
@@ -714,7 +714,7 @@ dialog_confirm(const char *title, const char *text, const char *options)
             newl = 0;
         }
     }
-    sng_free(tofree);
+    free(tofree);
     wattroff(dialog_win, COLOR_PAIR(CP_CYAN_ON_DEF));
 
     for (;;) {

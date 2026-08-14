@@ -144,7 +144,7 @@ call_list_destroy(ui_t *ui)
 
         // Deallocate panel windows
         delwin(info->list_win);
-        sng_free(info);
+        free(info);
     }
 
     ui_panel_destroy(ui);

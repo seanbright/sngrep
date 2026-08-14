@@ -194,7 +194,7 @@ save_destroy(ui_t *ui)
             free_field(info->fields[i]);
 
         // Remove panel window and custom info
-        sng_free(info);
+        free(info);
     }
 
     // Delete panel

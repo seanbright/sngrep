@@ -100,7 +100,7 @@ msg_diff_create(ui_t *ui)
 void
 msg_diff_destroy(ui_t *ui)
 {
-    sng_free(msg_diff_info(ui));
+    free(msg_diff_info(ui));
     ui_panel_destroy(ui);
 }
 

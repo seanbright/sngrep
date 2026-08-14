@@ -58,9 +58,9 @@ vector_destroy(vector_t *vector)
     // Remove all items if a destroyer is set
     vector_clear(vector);
     // Deallocate vector list
-    sng_free(vector->list);
+    free(vector->list);
     // Deallocate vector itself
-    sng_free(vector);
+    free(vector);
 }
 
 void
@@ -248,7 +248,7 @@ vector_set_sorter(vector_t *vector, void (*sorter) (vector_t *vector, void *item
 void
 vector_generic_destroyer(void *item)
 {
-    sng_free(item);
+    free(item);
 }
 
 void *

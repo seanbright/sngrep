@@ -465,7 +465,7 @@ ui_settings_save(ui_t *ui)
                 sprintf(userconf, "%s", rcfile);
                 sprintf(tmpfile, "%s.old", rcfile);
             } else {
-                sng_free(userconf);
+                free(userconf);
                 return;
             }
         } else {
@@ -477,7 +477,7 @@ ui_settings_save(ui_t *ui)
                 sprintf(userconf, "%s/.sngreprc", rcfile);
                 sprintf(tmpfile, "%s/.sngreprc.old", rcfile);
             } else {
-                sng_free(userconf);
+                free(userconf);
                 return;
             }
         } else {
@@ -496,8 +496,8 @@ ui_settings_save(ui_t *ui)
 
     // Create a new user conf file
     if (!(fo = fopen(userconf, "w"))) {
-        sng_free(userconf);
-        sng_free(tmpfile);
+        free(userconf);
+        free(tmpfile);
         return;
     }
 
@@ -529,6 +529,6 @@ ui_settings_save(ui_t *ui)
 
     dialog_run("Settings successfully saved to %s", userconf);
 
-    sng_free(userconf);
-    sng_free(tmpfile);
+    free(userconf);
+    free(tmpfile);
 }

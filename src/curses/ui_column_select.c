@@ -160,7 +160,7 @@ column_select_destroy(ui_t *ui)
     for (i = 0; i < FLD_COLUMNS_COUNT; i++)
         free_field(info->fields[i]);
 
-    sng_free(info);
+    free(info);
 
     // Remove panel window and custom info
     ui_panel_destroy(ui);
@@ -385,7 +385,7 @@ column_select_save_columns(ui_t *ui)
                 sprintf(userconf, "%s", rcfile);
                 sprintf(tmpfile, "%s.old", rcfile);
             } else {
-                sng_free(userconf);
+                free(userconf);
                 return;
             }
         } else {
@@ -397,7 +397,7 @@ column_select_save_columns(ui_t *ui)
                 sprintf(userconf, "%s/.sngreprc", rcfile);
                 sprintf(tmpfile, "%s/.sngreprc.old", rcfile);
             } else {
-                sng_free(userconf);
+                free(userconf);
                 return;
             }
         } else {
@@ -416,8 +416,8 @@ column_select_save_columns(ui_t *ui)
     // Create a new user conf file
     if (!(fo = fopen(userconf, "w"))) {
         dialog_run("Unable to open %s: %s", userconf, strerror(errno));
-        sng_free(userconf);
-        sng_free(tmpfile);
+        free(userconf);
+        free(tmpfile);
         return;
     }
 
@@ -453,8 +453,8 @@ column_select_save_columns(ui_t *ui)
     // Show a information dialog
     dialog_run("Column layout successfully saved to %s", userconf);
 
-    sng_free(userconf);
-    sng_free(tmpfile);
+    free(userconf);
+    free(tmpfile);
 }
 
 

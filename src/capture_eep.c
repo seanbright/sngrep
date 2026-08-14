@@ -384,7 +384,7 @@ capture_eep_send_v2(packet_t *pkt)
     }
 
     /* FREE */
-    sng_free(buffer);
+    free(buffer);
 
     return 1;
 }
@@ -517,7 +517,7 @@ capture_eep_send_v3(packet_t *pkt)
     hg->header.length = htons(tlen);
 
     if (!(buffer = sng_malloc(tlen))) {
-        sng_free(hg);
+        free(hg);
         return 1;
     }
     memcpy(buffer, hg, sizeof(struct hep_generic));
@@ -569,8 +569,8 @@ capture_eep_send_v3(packet_t *pkt)
     }
 
     /* FREE */
-    sng_free(buffer);
-    sng_free(hg);
+    free(buffer);
+    free(hg);
     return 0;
 }
 
@@ -684,7 +684,7 @@ capture_eep_receive_v2()
     // Build a custom frame pcap header
     frame_pcap_header = capture_eep_build_frame_data(header, payload,header.caplen, src, dst, &frame_payload);
     if (!frame_payload) {
-        sng_free(payload);
+        free(payload);
         return NULL;
     }
 
@@ -696,10 +696,10 @@ capture_eep_receive_v2()
     packet_set_payload(pkt, payload, header.caplen);
 
     // We don't longer require frame payload anymore, because adding the frame to packet clones its memory
-    sng_free(frame_payload);
+    free(frame_payload);
 
     /* FREE */
-    sng_free(payload);
+    free(payload);
     return pkt;
 
 }
@@ -790,7 +790,7 @@ capture_eep_receive_v3(const u_char *pkt, uint32_t size)
         switch (chunk_type) {
             case CAPTURE_EEP_CHUNK_INVALID:
                 if (payload)
-                    sng_free(payload);
+                    free(payload);
                 return NULL;
             case CAPTURE_EEP_CHUNK_FAMILY:
                 memcpy(&hg.ip_family, buffer + pos, sizeof(hep_chunk_uint8_t));
@@ -882,7 +882,7 @@ capture_eep_receive_v3(const u_char *pkt, uint32_t size)
     // Build a custom frame pcap header
     frame_pcap_header = capture_eep_build_frame_data(header, payload,header.caplen, src, dst, &frame_payload);
     if (!frame_payload) {
-        sng_free(payload);
+        free(payload);
         return NULL;
     }
 
@@ -893,11 +893,11 @@ capture_eep_receive_v3(const u_char *pkt, uint32_t size)
     packet_set_payload(pkt_new, payload, header.caplen);
 
     // We don't longer require frame payload anymore, because adding the frame to packet clones its memory
-    sng_free(frame_payload);
+    free(frame_payload);
 
     /* FREE */
-    sng_free(payload);
-    sng_free(password);
+    free(payload);
+    free(password);
 
     return pkt_new;
 }

@@ -45,12 +45,6 @@
 void *
 sng_malloc(size_t size);
 
-/**
- * @brief Wrapper for memmory deallocation
- */
-void
-sng_free(void *ptr);
-
 /*
  * @brief Generic implementation of basename
  */

@@ -678,7 +678,7 @@ sip_parse_msg_media(sip_msg_t *msg, const u_char *payload)
         if (!rtp_find_call_stream(call, src, stream->dst)) { \
           call_add_stream(call, stream); \
       } else { \
-          sng_free(stream); \
+          free(stream); \
           stream = NULL; \
       } \
     }
@@ -775,7 +775,7 @@ sip_parse_msg_media(sip_msg_t *msg, const u_char *payload)
     ADD_STREAM(rtp_stream);
     ADD_STREAM(rtcp_stream);
 
-    sng_free(tofree);
+    free(tofree);
 
 #undef ADD_STREAM
 }

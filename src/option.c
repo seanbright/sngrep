@@ -94,7 +94,7 @@ init_options(int no_config)
         if ((userconf = sng_malloc(strlen(rcfile) + RCFILE_EXTRA_LEN))) {
             sprintf(userconf, "%s/.sngreprc", rcfile);
             read_options(userconf);
-            sng_free(userconf);
+            free(userconf);
         }
     }
 
@@ -107,8 +107,8 @@ deinit_options()
     int i;
     // Deallocate options memory
     for (i = 0; i < optscnt; i++) {
-        sng_free(options[i].opt);
-        sng_free(options[i].value);
+        free(options[i].opt);
+        free(options[i].value);
     }
 }
 
@@ -185,7 +185,7 @@ set_option_value(const char *opt, const char *value)
     } else {
         for (i = 0; i < optscnt; i++) {
             if (!strcasecmp(opt, options[i].opt)) {
-                sng_free(options[i].value);
+                free(options[i].value);
                 options[i].value = strdup(value);
             }
         }
@@ -215,7 +215,7 @@ get_alias_value_vs_port(const char *address, uint16_t port)
         if (options[i].type != ALIAS)
             continue;
         if (!strcmp(options[i].opt, addr_port) || !strcmp(options[i].opt, address)) {
-            sng_free(addr_port);
+            free(addr_port);
             return options[i].value;
         }
     }

@@ -81,10 +81,10 @@ call_destroy(sip_call_t *call)
     // Remove all xcalls
     vector_destroy(call->xcalls);
     // Deallocate call memory
-    sng_free(call->callid);
-    sng_free(call->xcallid);
-    sng_free(call->reasontxt);
-    sng_free(call);
+    free(call->callid);
+    free(call->xcallid);
+    free(call->reasontxt);
+    free(call);
 }
 
 void

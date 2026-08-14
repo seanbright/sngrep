@@ -95,13 +95,6 @@ sng_malloc(size_t size)
     return data;
 }
 
-void
-sng_free(void *ptr)
-{
-    if (ptr)
-        free(ptr);
-}
-
 char *
 sng_basename(const char *name)
 {

@@ -868,7 +868,7 @@ capture_packet_reasm_tcp(capture_info_t *capinfo, packet_t *packet, struct tcphd
             memcpy(new_payload + size_payload, pkt->payload, pkt->payload_len);
         }
         packet_set_payload(pkt, new_payload, pkt->payload_len + size_payload);
-        sng_free(new_payload);
+        free(new_payload);
     }
 
     // Check if packet is too large after assembly
@@ -1011,7 +1011,7 @@ capture_ws_check_packet(packet_t *packet)
     // Set new packet payload into the packet
     packet_set_payload(packet, newpayload, size_payload);
     // Free the new payload
-    sng_free(newpayload);
+    free(newpayload);
 
     if (packet->type == PACKET_SIP_TLS) {
         packet_set_type(packet, PACKET_SIP_WSS);

@@ -236,7 +236,7 @@ tls_connection_destroy(struct SSLConnection *conn)
     EVP_CIPHER_CTX_free(conn->server_cipher_ctx);
     SSL_CTX_free(conn->ssl_ctx);
     SSL_free(conn->ssl);
-    sng_free(conn);
+    free(conn);
 }
 
 /**
@@ -387,7 +387,7 @@ tls_process_segment(packet_t *packet, struct tcphdr *tcp)
         }
     }
 
-    sng_free(out);
+    free(out);
     return 0;
 }
 
@@ -685,7 +685,7 @@ tls_process_record_handshake(struct SSLConnection *conn, const opaque *fragment,
                 tls_debug_print_hex("server_write_IV", key_material,  conn->cipher_data.ivblock);
 
                 // Done with the seed
-                sng_free(seed);
+                free(seed);
 
                 // Create Client decoder
 #if MODSSL_USE_OPENSSL_PRE_1_1_API
@@ -718,7 +718,7 @@ tls_process_record_handshake(struct SSLConnection *conn, const opaque *fragment,
                     uint8_t *decoded = sng_malloc(len);
                     uint32_t decodedlen = len;
                     tls_process_record_data(conn, fragment, len, &decoded, &decodedlen);
-                    sng_free(decoded);
+                    free(decoded);
                 }
                 break;
         }
@@ -804,7 +804,7 @@ tls_process_record_data(struct SSLConnection *conn, const opaque *fragment,
     }
 
     // Cleanup decoded memory
-    sng_free(decoded);
+    free(decoded);
     return *outl;
 }
 

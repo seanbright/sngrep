@@ -75,7 +75,7 @@ call_raw_destroy(ui_t *ui)
     if ((info = call_raw_info(ui))) {
         // Delete panel windows
         delwin(info->pad);
-        sng_free(info);
+        free(info);
     }
     ui_panel_destroy(ui);
 }
