@@ -172,8 +172,8 @@ sip_init(int limit, int only_calls, int no_incomplete)
 
     // Initialize payload parsing regexp
     match_flags = REG_EXTENDED | REG_ICASE | REG_NEWLINE;
-    regcomp(&calls.reg_method, "^([a-zA-Z]+) [a-zA-Z]+:.* SIP/2.0[ ]*\r", match_flags & ~REG_NEWLINE);
-    regcomp(&calls.reg_callid, "^(Call-ID|i):[ ]*([^ ]+)[ ]*\r$", match_flags);
+    regcomp(&calls.reg_method, "^([A-Z]+) [A-Z]+:.* SIP/2\\.0 *\r", match_flags & ~REG_NEWLINE);
+    regcomp(&calls.reg_callid, "^(Call-ID|i): *([^ ]+) *\r$", match_flags);
     setting = setting_get_value(SETTING_SIP_HEADER_X_CID);
     reg_rule_len = strlen(setting) + 22;
     if (reg_rule_len >= SIP_ATTR_MAXLEN) {
@@ -182,7 +182,7 @@ sip_init(int limit, int only_calls, int no_incomplete)
         fprintf(stderr, "%s setting too long, using default.\n",
             setting_name(SETTING_SIP_HEADER_X_CID));
     }
-    snprintf(reg_rule, reg_rule_len, "^(%s):[ ]*([^ ]+)[ ]*\r$", setting);
+    snprintf(reg_rule, reg_rule_len, "^(%s): *([^ ]+) *\r$", setting);
     reg_rule_err = regcomp(&calls.reg_xcallid, reg_rule, match_flags);
     if(reg_rule_err != 0) {
         regerror(reg_rule_err, &calls.reg_xcallid, reg_rule, SIP_ATTR_MAXLEN);
@@ -191,18 +191,18 @@ sip_init(int limit, int only_calls, int no_incomplete)
             "using default value instead\n",
             setting_name(SETTING_SIP_HEADER_X_CID), reg_rule);
         regcomp(&calls.reg_xcallid,
-            "^(X-Call-ID|X-CID):[ ]*([^ ]+)[ ]*\r$", match_flags);
+            "^(X-Call-ID|X-CID): *([^ ]+) *\r$", match_flags);
     }
-    regcomp(&calls.reg_response, "^SIP/2.0[ ]*(([0-9]{3}) [^\r]*)[ ]*\r", match_flags & ~REG_NEWLINE);
-    regcomp(&calls.reg_cseq, "^CSeq:[ ]*([0-9]{1,10}) .+\r$", match_flags);
-    regcomp(&calls.reg_from, "^(From|f):[ ]*[^:]*:(([^@>]+)@?[^\r>;]+)", match_flags);
-    regcomp(&calls.reg_to, "^(To|t):[ ]*[^:]*:(([^@>]+)@?[^\r>;]+)", match_flags);
-    regcomp(&calls.reg_contact, "^(Contact|m):[ ]*[^:]*:(([^@>]+)@?[^\r>;]+)", match_flags);
-    regcomp(&calls.reg_valid, "^([A-Z]+ [a-zA-Z]+:|SIP/2.0 [0-9]{3})", match_flags & ~REG_NEWLINE);
-    regcomp(&calls.reg_cl, "^(Content-Length|l):[ ]*([0-9]+)[ ]*\r$", match_flags);
+    regcomp(&calls.reg_response, "^SIP/2\\.0 *(([0-9]{3}) [^\r]*) *\r", match_flags & ~REG_NEWLINE);
+    regcomp(&calls.reg_cseq, "^CSeq: *([0-9]{1,10}) .+\r$", match_flags);
+    regcomp(&calls.reg_from, "^(From|f): *[^:]*:(([^@>]+)@?[^\r>;]+)", match_flags);
+    regcomp(&calls.reg_to, "^(To|t): *[^:]*:(([^@>]+)@?[^\r>;]+)", match_flags);
+    regcomp(&calls.reg_contact, "^(Contact|m): *[^:]*:(([^@>]+)@?[^\r>;]+)", match_flags);
+    regcomp(&calls.reg_valid, "^([A-Z]+ [A-Z]+:|SIP/2\\.0 [0-9]{3})", match_flags & ~REG_NEWLINE);
+    regcomp(&calls.reg_cl, "^(Content-Length|l): *([0-9]+) *\r$", match_flags);
     regcomp(&calls.reg_body, "\r\n\r\n(.*)", match_flags & ~REG_NEWLINE);
-    regcomp(&calls.reg_reason, "Reason:[ ]*[^\r]*;text=\"([^\r]+)\"", match_flags);
-    regcomp(&calls.reg_warning, "Warning:[ ]*([0-9]*)", match_flags);
+    regcomp(&calls.reg_reason, "Reason: *[^\r]*;text=\"([^\r]+)\"", match_flags);
+    regcomp(&calls.reg_warning, "Warning: *([0-9]*)", match_flags);
 
 }
 
