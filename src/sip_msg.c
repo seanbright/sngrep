@@ -147,12 +147,12 @@ msg_get_attribute(sip_msg_t *msg, int id, char *value)
             break;
         case SIP_ATTR_SIPFROMUSER:
             if (msg->sip_from && (ar = strchr(msg->sip_from, '@'))) {
-                sng_strncpy(value, msg->sip_from, ar - msg->sip_from);
+                sng_strncpy(value, msg->sip_from, ar - msg->sip_from + 1);
             }
             break;
         case SIP_ATTR_SIPTOUSER:
             if (msg->sip_to && (ar = strchr(msg->sip_to, '@'))) {
-                sng_strncpy(value, msg->sip_to, ar - msg->sip_to);
+                sng_strncpy(value, msg->sip_to, ar - msg->sip_to + 1);
             }
             break;
         case SIP_ATTR_DATE:

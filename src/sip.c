@@ -240,11 +240,11 @@ sip_get_callid(const char* payload, char *callid)
 
     // Try to get Call-ID from payload
     if (regexec(&calls.reg_callid, payload, 3, pmatch, 0) == 0) {
-        int input_len = pmatch[2].rm_eo - pmatch[2].rm_so;
+        int input_len = pmatch[2].rm_eo - pmatch[2].rm_so + 1;
 
-        // Ensure the copy length does not exceed MAX_CALLID_SIZE - 1
-        if (input_len > MAX_CALLID_SIZE - 1) {
-            input_len = MAX_CALLID_SIZE - 1;
+        // Ensure the copy length does not exceed MAX_CALLID_SIZE
+        if (input_len > MAX_CALLID_SIZE) {
+            input_len = MAX_CALLID_SIZE;
         }
 
         // Copy the matching part of payload
@@ -261,7 +261,7 @@ sip_get_xcallid(const char *payload, char *xcallid)
 
     // Try to get X-Call-ID from payload
     if (regexec(&calls.reg_xcallid, (const char *)payload, 3, pmatch, 0) == 0) {
-        int input_len = pmatch[2].rm_eo - pmatch[2].rm_so;
+        int input_len = pmatch[2].rm_eo - pmatch[2].rm_so + 1;
 
         // Ensure the copy length does not exceed MAX_XCALLID_SIZE
         if (input_len > MAX_XCALLID_SIZE) {
@@ -308,7 +308,7 @@ sip_validate_packet(packet_t *packet)
     }
 
     // Ensure the copy length does not exceed MAX_CONTENT_LENGTH_SIZE
-    int cl_match_len = pmatch[2].rm_eo - pmatch[2].rm_so;
+    int cl_match_len = pmatch[2].rm_eo - pmatch[2].rm_so + 1;
     if (cl_match_len > MAX_CONTENT_LENGTH_SIZE) {
         cl_match_len = MAX_CONTENT_LENGTH_SIZE;
     }
@@ -641,29 +641,29 @@ sip_parse_msg_payload(sip_msg_t *msg, const u_char *payload)
 
     // From
     if (regexec(&calls.reg_from, (const char *)payload, 4, pmatch, 0) == 0) {
-        msg->sip_from = sng_malloc((int)pmatch[2].rm_eo - pmatch[2].rm_so + 1);
-        sng_strncpy(msg->sip_from, (const char *)payload +  pmatch[2].rm_so, (int)pmatch[2].rm_eo - pmatch[2].rm_so);
+        int len = pmatch[2].rm_eo - pmatch[2].rm_so + 1;
+        msg->sip_from = sng_malloc(len);
+        sng_strncpy(msg->sip_from, (const char *)payload +  pmatch[2].rm_so, len);
     } else {
         // Malformed From Header
-        msg->sip_from = sng_malloc(12);
-        sng_strncpy(msg->sip_from, "<malformed>", 12);
+        msg->sip_from = strdup("<malformed>");
     }
 
     // To
     if (regexec(&calls.reg_to, (const char *)payload, 4, pmatch, 0) == 0) {
-        msg->sip_to = sng_malloc((int)pmatch[2].rm_eo - pmatch[2].rm_so + 1);
-        sng_strncpy(msg->sip_to, (const char *)payload +  pmatch[2].rm_so, (int)pmatch[2].rm_eo - pmatch[2].rm_so);
+        int len = pmatch[2].rm_eo - pmatch[2].rm_so + 1;
+        msg->sip_to = sng_malloc(len);
+        sng_strncpy(msg->sip_to, (const char *)payload +  pmatch[2].rm_so, len);
     } else {
         // Malformed To Header
-        msg->sip_to = sng_malloc(12);
-        sng_strncpy(msg->sip_to, "<malformed>", 12);
+        msg->sip_to = strdup("<malformed>");
     }
 
     // Contact
     if (regexec(&calls.reg_contact, (const char *)payload, 3, pmatch, 0) == 0) {
-        int len = (int)pmatch[2].rm_eo - pmatch[2].rm_so;
-        msg->sip_contact = sng_malloc(len + 1);
-        sng_strncpy(msg->sip_contact, (const char *)payload + pmatch[2].rm_so, len + 1);
+        int len = pmatch[2].rm_eo - pmatch[2].rm_so + 1;
+        msg->sip_contact = sng_malloc(len);
+        sng_strncpy(msg->sip_contact, (const char *)payload + pmatch[2].rm_so, len);
     }
 
     return 0;
@@ -746,11 +746,11 @@ sip_parse_msg_media(sip_msg_t *msg, const u_char *payload)
         // Check if we have a connection string
         if (!strncmp(line, "c=", 2)) {
             if (sscanf(line, "c=IN IP%*c %" STRINGIFY(ADDRESSLEN) "s", address)) {
-                sng_strncpy(dst.ip, address, ADDRESSLEN);
+                sng_strncpy(dst.ip, address, sizeof(dst.ip));
                 if (media) {
                     media_set_address(media, dst);
-                    sng_strncpy(rtp_stream->dst.ip, dst.ip, ADDRESSLEN);
-                    sng_strncpy(rtcp_stream->dst.ip, dst.ip, ADDRESSLEN);
+                    sng_strncpy(rtp_stream->dst.ip, dst.ip, sizeof(rtp_stream->dst.ip));
+                    sng_strncpy(rtcp_stream->dst.ip, dst.ip, sizeof(rtcp_stream->dst.ip));
                 }
             }
         }
@@ -788,16 +788,17 @@ sip_parse_extra_headers(sip_msg_t *msg, const u_char *payload)
 
      // Reason text
      if (regexec(&calls.reg_reason, (const char *)payload, 2, pmatch, 0) == 0) {
-         msg->call->reasontxt = sng_malloc((int)pmatch[1].rm_eo - pmatch[1].rm_so + 1);
-         sng_strncpy(msg->call->reasontxt, (const char *)payload +  pmatch[1].rm_so, (int)pmatch[1].rm_eo - pmatch[1].rm_so);
+         int len = pmatch[1].rm_eo - pmatch[1].rm_so + 1;
+         msg->call->reasontxt = sng_malloc(len);
+         sng_strncpy(msg->call->reasontxt, (const char *)payload +  pmatch[1].rm_so, len);
      }
 
      // Warning code
      if (regexec(&calls.reg_warning, (const char *)payload, 2, pmatch, 0) == 0) {
 
         // Ensure the copy length does not exceed MAX_WARNING_SIZE
-        int warning_match_len = pmatch[1].rm_eo - pmatch[1].rm_so;
-        if (warning_match_len > 0) {
+        int warning_match_len = pmatch[1].rm_eo - pmatch[1].rm_so + 1;
+        if (warning_match_len > 1) {
             if (warning_match_len > MAX_WARNING_SIZE) {
                 warning_match_len = MAX_WARNING_SIZE;
             }

@@ -57,8 +57,12 @@ sng_free(void *ptr);
 char *
 sng_basename(const char *name);
 
-/*
+/**
  * @brief Wrapper for strncpy
+ *
+ * @param dst The destination buffer
+ * @param src The source string
+ * @param len The number of bytes available to be written in `dst`
  */
 char *
 sng_strncpy(char *dst, const char *src, size_t len);
