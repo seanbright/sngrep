@@ -12,7 +12,7 @@ m4_ifdef([AC_USE_SYSTEM_EXTENSIONS], [AC_USE_SYSTEM_EXTENSIONS])
 
 # debug compilation
 AC_ARG_ENABLE(debug,
-    AC_HELP_STRING(--enable-debug, [Debug compilation (Default = no)]),
+    AS_HELP_STRING([--enable-debug], [Debug compilation (Default = no)]),
     enable_debug=$enableval, enable_debug=no)
 
 if test "$enable_debug" = "yes" ; then
@@ -49,7 +49,7 @@ AC_CHECK_HEADER([pcap.h], [], [
 #### Ncurses Wide character support
 ####
 AC_ARG_ENABLE([unicode],
-	AC_HELP_STRING([--enable-unicode], [Enable Ncurses Unicode support]),
+	AS_HELP_STRING([--enable-unicode], [Enable Ncurses Unicode support]),
 	[AC_SUBST(UNICODE, $enableval)],
 	[AC_SUBST(UNICODE, no)]
 )
@@ -309,7 +309,7 @@ AM_CONDITIONAL([WITH_ZLIB], [test "x$WITH_ZLIB" = "xyes"])
 ######################################################################
 # Print Logo
 AC_ARG_ENABLE(logo,
-    AC_HELP_STRING(--disable-logo, [Disable Irontec Logo from Summary menu]),
+    AS_HELP_STRING([--disable-logo], [Disable Irontec Logo from Summary menu]),
     [ enable_logo=$enableval],
     [ enable_logo=yes])
 
