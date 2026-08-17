@@ -818,10 +818,7 @@ call_list_handle_form_key(ui_t *ui, int key)
     form_driver(info->form, REQ_VALIDATION);
 
     // Store dfilter input
-    int field_len = strlen(field_buffer(info->fields[FLD_LIST_FILTER], 0));
-    dfilter = malloc(field_len + 1);
-    memset(dfilter, 0, field_len + 1);
-    sng_strncpy(dfilter, field_buffer(info->fields[FLD_LIST_FILTER], 0), field_len);
+    dfilter = strdup(field_buffer(info->fields[FLD_LIST_FILTER], 0));
     // Trim any trailing spaces
     strtrim(dfilter);
 
